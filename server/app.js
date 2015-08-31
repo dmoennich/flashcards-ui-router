@@ -63,23 +63,31 @@ app.post('/cards', function (req, res, next) {
     .then(null, next);
 });
 
-app.put('/cards/:id', function (req, res, next) {
-    // FlashCardModel.findByIdAndUpdate(req.params.id, req.body).exec()
-    // .then(function (updatedCard) {
-    //     res.json(updatedCard);
-    // })
-    // .then(null, next);
-
+app.get("/cards/:id", function (req, response, next) {
     FlashCardModel.findById(req.params.id).exec()
     .then(function (foundCard) {
-        for (var k in req.body) {
-            foundCard[k] = req.body[k];
-        }
-        return foundCard.save();
+        response.json(foundCard);
     })
+    .then(null, next);
+});
+
+app.put('/cards/:id', function (req, res, next) {
+    FlashCardModel.findByIdAndUpdate(req.params.id, req.body).exec()
     .then(function (updatedCard) {
         res.json(updatedCard);
     })
     .then(null, next);
+
+    // FlashCardModel.findById(req.params.id).exec()
+    // .then(function (foundCard) {
+    //     for (var k in req.body) {
+    //         foundCard[k] = req.body[k];
+    //     }
+    //     return foundCard.save();
+    // })
+    // .then(function (updatedCard) {
+    //     res.json(updatedCard);
+    // })
+    // .then(null, next);
 });
 
