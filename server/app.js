@@ -23,6 +23,9 @@ var indexHtmlPath = path.join(__dirname, '../index.html');
 // e.g. angular.js, style.css
 app.use(express.static(publicPath));
 
+var bowerPath = path.join(__dirname, '../bower_components');
+app.use("/bower_components", express.static(bowerPath));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
