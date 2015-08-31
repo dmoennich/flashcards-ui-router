@@ -27,67 +27,74 @@ var bowerPath = path.join(__dirname, '../bower_components');
 app.use("/bower_components", express.static(bowerPath));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // If we're hitting our home page, serve up our index.html file!
-app.get('/', function (req, res) {
-    res.sendFile(indexHtmlPath);
+app.get('/', function(req, res) {
+  res.sendFile(indexHtmlPath);
 });
 
-app.use(function (req, res, next) {
-	console.log('made it')
-	next();
+app.use(function(req, res, next) {
+  console.log('made it');
+  next();
 });
 
-app.get('/cards', function (req, res) {
+app.get('/cards', function(req, res) {
 
-    var modelParams = {};
+  var modelParams = {};
 
-    if (req.query.category) {
-    	modelParams.category = req.query.category;
-    }
+  if (req.query.category) {
+    modelParams.category = req.query.category;
+  }
 
-    FlashCardModel.find(modelParams, function (err, cards) {
-        setTimeout(function () {
-            res.send(cards);
-        }, 500 + Math.random() * 1000);
-    });
+  FlashCardModel.find(modelParams, function(err, cards) {
+    setTimeout(function() {
+      res.send(cards);
+    }, 500 + Math.random() * 1000);
+  });
 
 });
 
-app.post('/cards', function (req, res, next) {
-    FlashCardModel.create(req.body)
-    .then(function (newCard) {
-        res.json(newCard);
+app.post('/cards', function(req, res, next) {
+  FlashCardModel.create(req.body)
+    .then(function(newCard) {
+      res.json(newCard);
     })
     .then(null, next);
 });
 
-app.get("/cards/:id", function (req, response, next) {
-    FlashCardModel.findById(req.params.id).exec()
-    .then(function (foundCard) {
-        response.json(foundCard);
+app.get("/cards/:id", function(req, response, next) {
+  FlashCardModel.findById(req.params.id).exec()
+    .then(function(foundCard) {
+      response.json(foundCard);
     })
     .then(null, next);
 });
 
-app.put('/cards/:id', function (req, res, next) {
-    FlashCardModel.findByIdAndUpdate(req.params.id, req.body).exec()
-    .then(function (updatedCard) {
-        res.json(updatedCard);
+app.put('/cards/:id', function(req, res, next) {
+  FlashCardModel.findByIdAndUpdate(req.params.id, req.body).exec()
+    .then(function(updatedCard) {
+      res.json(updatedCard);
     })
     .then(null, next);
 
-    // FlashCardModel.findById(req.params.id).exec()
-    // .then(function (foundCard) {
-    //     for (var k in req.body) {
-    //         foundCard[k] = req.body[k];
-    //     }
-    //     return foundCard.save();
-    // })
-    // .then(function (updatedCard) {
-    //     res.json(updatedCard);
-    // })
-    // .then(null, next);
+  // FlashCardModel.findById(req.params.id).exec()
+  // .then(function (foundCard) {
+  //     for (var k in req.body) {
+  //         foundCard[k] = req.body[k];
+  //     }
+  //     return foundCard.save();
+  // })
+  // .then(function (updatedCard) {
+  //     res.json(updatedCard);
+  // })
+  // .then(null, next);
 });
 
+app.delete('/cards/:id', function(req, res, next) {
+  FlashCardModel.findByIdAndRemove(req.params.id).then(function() {
+    res.sendStatus(410);
+  }).then(null, next);
+});
