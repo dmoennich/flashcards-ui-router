@@ -1,7 +1,7 @@
 app.config(function($stateProvider) {
   $stateProvider.state("form", {
-    url: '/',
-    template: '/templates/form.html',
+    url: '/form',
+    templateUrl: '/templates/form.html',
     controller: 'NewCardController'
   });
 });

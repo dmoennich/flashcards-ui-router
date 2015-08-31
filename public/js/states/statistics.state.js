@@ -1,6 +1,6 @@
 app.config(function($stateProvider) {
 	$stateProvider.state("stats", {
-		url: "/",
+		url: "/stats",
 		templateUrl: "/templates/statistics.html",
 		controller: "StatsController"
 	});
